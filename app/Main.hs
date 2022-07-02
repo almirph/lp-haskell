@@ -8,7 +8,7 @@ main = do
     putStrLn "?" 
     guesString <- getLine
     let guesList = map read $ words guesString :: [Int]
-    hits <- compareGuesAndRandom guesList guesList 0 (0, 0)
+    hits <- compareGuesAndRandom guesList keyList 0 (0, 0)
     putStrLn(show keyList)
     putStrLn(show guesList)
     print(hits)
@@ -25,14 +25,13 @@ compareGuesAndRandom :: [Int] -> [Int] -> Int -> (Int, Int) -> IO(Int, Int)
 compareGuesAndRandom guesList keyList 4 hits = do
     return hits
 compareGuesAndRandom guesList keyList position hits = do
-    let guesElement = guesList!!position
-    let keyElement = keyList!!position
-    if guesElement == keyElement
+    let newPosition = position + 1
+    if guesList!!position == keyList!!position
     then do
         print("igual")
-        newHits <- compareGuesAndRandom guesList keyList 4 hits
+        newHits <- compareGuesAndRandom guesList keyList newPosition hits
         return newHits
     else do
-        newHits <- compareGuesAndRandom guesList keyList 4 hits
+        newHits <- compareGuesAndRandom guesList keyList newPosition hits
         return newHits
 
