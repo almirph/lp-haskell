@@ -9,6 +9,7 @@ import System.Random (randomRIO)
 main :: IO ()
 main = do  
     keyList <- randomList(4)
+    putStrLn("Digite 4 números entre 1 e 6 separados por 'espaço'.") 
     plays <- play keyList 0 (0, 0)
     putStr("Parabéns você acertou após " ++ show plays ++ " tentativas.") 
 
