@@ -21,12 +21,24 @@ play keyList plays hits = do
         putStrLn "?"
         guesString <- getLine
         let guesList = map read $ words guesString :: [Int]
-        newHits <- compareGuesAndRandom guesList keyList [] [False, False, False, False] 0 (0, 0)
-        let (newComplete, _) = newHits
-        let (_, partial) = newHits
-        putStrLn("Completo " ++ show newComplete ++ " Parcial " ++ show partial)
-        let newPlays = plays + 1
-        play keyList newPlays newHits
+        let guesLen = getLength guesList
+        if guesLen == 4
+        then do
+            isValid <- validate guesList 0
+            if isValid
+            then do
+                newHits <- compareGuesAndRandom guesList keyList [] [False, False, False, False] 0 (0, 0)
+                let (newComplete, _) = newHits
+                let (_, partial) = newHits
+                putStrLn("Completo " ++ show newComplete ++ " Parcial " ++ show partial)
+                let newPlays = plays + 1
+                play keyList newPlays newHits
+            else do
+                putStrLn("Entrada inválida, os dígitos devem estar entre 1 e 6, divididos por espaço.") 
+                play keyList plays hits
+        else do
+            putStrLn("Entrada inválida, devem ser digitados 4 dígitos separados por espaço.") 
+            play keyList plays hits
     else return plays
 
 compareGuesAndRandom :: [Int] -> [Int] -> [Int] -> [Bool] -> Int -> (Int, Int) -> IO(Int, Int)
@@ -98,3 +110,22 @@ randomList n = do
     r  <- randomRIO (1,6)
     rs <- randomList (n-1)
     return (r:rs) 
+
+(<?) :: Ord a => a -> (a,a) -> Bool
+(<?) x (min, max) = x >= min && x <= max
+validate :: [Int] -> Int -> IO(Bool)
+validate guesList 4 = do
+    return True
+validate guesList position = do
+    let guesListPosition = guesList!!position
+    if guesListPosition <? (1, 6)
+    then do
+        let newPosition = position + 1
+        validateResult <- validate guesList newPosition
+        return validateResult
+    else do
+        return False
+
+getLength :: [a] -> Int
+getLength [] = 0
+getLength (_:xs) = 1 + getLength xs
