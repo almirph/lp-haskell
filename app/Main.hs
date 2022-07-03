@@ -2,6 +2,10 @@ module Main where
 
 import System.Random (randomRIO)
 
+-- Feito por
+-- Almir Philipe de Arruda 201635039
+-- Vinícius de Castro Sampaio 201635002
+
 main :: IO ()
 main = do  
     keyList <- randomList(4)
@@ -23,7 +27,6 @@ play keyList plays hits = do
         let newPlays = plays + 1
         play keyList newPlays newHits
     else return plays
-
 
 compareGuesAndRandom :: [Int] -> [Int] -> [Int] -> [Bool] -> Int -> (Int, Int) -> IO(Int, Int)
 compareGuesAndRandom guesList keyList partials complets 4 hits = do
